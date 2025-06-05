@@ -70,21 +70,21 @@ Clone this git repo by using below this command
   ```
 
 Choose one of the following options to setup ISE infra
-### 1. [Deploy using an existing VPC](./examples/create-ec2-with-existing-vpc/)
+### 1. [Deploy using an existing VPC](./aws-nodes/examples/create-ec2-with-existing-vpc/)
 
 To deploy using an existing VPC
   ```
   cd examples/create-ec2-with-existing-vpc
   ```
-  Refer [create-ec2-with-existing-vpc README](./examples/create-ec2-with-existing-vpc/README.md) and update the variables in terraform.tfvars
+  Refer [create-ec2-with-existing-vpc README](./aws-nodes/examples/create-ec2-with-existing-vpc/README.md) and update the variables in terraform.tfvars
 
-### 2. [Deploy using a new VPC](./examples/create-ec2-with-new-vpc/)
+### 2. [Deploy using a new VPC](./aws-nodes/examples/create-ec2-with-new-vpc/)
 
 To deploy using a new VPC
 ```
 cd examples/create-ec2-with-new-vpc
 ```
-Refer [create-ec2-with-new-vpc README](./examples/create-ec2-with-new-vpc/README.md) and update the variables in terraform.tfvars
+Refer [create-ec2-with-new-vpc README](./aws-nodes/examples/create-ec2-with-new-vpc/README.md) and update the variables in terraform.tfvars
 
 <a name="terraform_init_command"></a>
 After updating terraform.tfvars run the below commands
@@ -101,7 +101,7 @@ Type 'yes' when prompted after running terraform apply
 
 After `terraform apply` is completed, the output block will be generated as shown in the screenshot below
 
-![alt terraform output](./docs/terraform_ouput.png)
+![alt terraform output](./aws-nodes/docs/terraform_ouput.png)
 
 After setting up ISE infra using terraform, it will take 45-60 minutes (**Note**: Time may vary based on number of nodes) for the stack to deploy and ISE application to come up
 
@@ -110,7 +110,7 @@ After setting up ISE infra using terraform, it will take 45-60 minutes (**Note**
 
 For your reference, below screenshot shows the AWS State Machine output (Can be found under AWS Step Functions) after ISE application is successfully launched and running. Each Lambda has its own Log Groups created while launching the stack. Please monitor logs as per the requirement.
 
-![alt state machine output](./docs/state_machine_diagram.png)
+![alt state machine output](./aws-nodes/docs/state_machine_diagram.png)
 
 ## Destroy Infrastructure
 
