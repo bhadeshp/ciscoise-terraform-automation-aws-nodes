@@ -27,7 +27,7 @@ locals {
 }
 
 module "cisco_ise_vpc" {
-  source                = "git::ssh://git@github.com/CiscoISE/ciscoise-terraform-automation-aws-vpc.git//modules/vpc_modules"
+  source                = "../../../aws-vpc/modules/vpc_modules"
   vpc_cidr              = var.vpc_cidr
   vpc_name              = var.vpc_name
   availability_zones    = var.availability_zones
