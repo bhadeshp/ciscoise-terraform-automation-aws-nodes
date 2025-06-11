@@ -459,6 +459,11 @@ variable "primary_instance_config" {
     condition     = contains(["t3.xlarge", "m5.2xlarge", "c5.4xlarge", "m5.4xlarge", "c5.9xlarge", "m5.8xlarge", "m5.16xlarge"], join("", [for val in var.primary_instance_config : val.instance_type]))
     error_message = "Supported instance type for Cisco ISE nodes are t3.xlarge, m5.2xlarge, c5.4xlarge, m5.4xlarge, c5.9xlarge, m5.8xlarge, m5.16xlarge]"
   }
+
+  validation {
+    condition     = alltrue([for key, v in var.primary_instance_config : length(key) < 20])
+    error_message = "Hostname must not exceed 19 characters: ${format("%#v", { for key, v in var.primary_instance_config : key => length(key) if length(key) > 19 })}"
+  }
 }
 
 variable "secondary_instance_config" {
@@ -507,6 +512,11 @@ variable "secondary_instance_config" {
   validation {
     condition     = length(flatten([for vm in values(var.secondary_instance_config) : [for role in split(",", vm.roles) : role if role != "SecondaryAdmin" && role != "SecondaryMonitoring" && role != "PrimaryMonitoring"]])) == 0
     error_message = "For secondary pan node, roles can only accept SecondaryAdmin, SecondaryMonitoring and PrimaryMonitoring values"
+  }
+
+  validation {
+    condition     = alltrue([for key, v in var.secondary_instance_config : length(key) < 20])
+    error_message = "Hostname must not exceed 19 characters: ${format("%#v", { for key, v in var.primary_instance_config : key => length(key) if length(key) > 19 })}"
   }
 }
 
@@ -566,6 +576,11 @@ variable "psn_instance_config" {
     condition     = length([for vm in values(var.psn_instance_config) : vm.roles if vm.roles != null && (vm.roles != "SecondaryMonitoring" && vm.roles != "SecondaryDedicatedMonitoring" && vm.roles != "PrimaryDedicatedMonitoring" && vm.roles != "PrimaryMonitoring" && vm.roles != " ")]) == 0
     error_message = "For PSN nodes, roles can only accept one of these values - SecondaryMonitoring, SecondaryDedicatedMonitoring, PrimaryMonitoring, PrimaryDedicatedMonitoring"
   }
+
+  validation {
+    condition     = alltrue([for key, v in var.psn_instance_config : length(key) < 20])
+    error_message = "Hostname must not exceed 19 characters: ${format("%#v", { for key, v in var.psn_instance_config : key => length(key) if length(key) > 19 })}"
+  }
 }
 
 variable "ebs_encrypt" {
@@ -575,16 +590,6 @@ variable "ebs_encrypt" {
 variable "enable_stickiness" {
   description = "Choose true or false to enable/disable stickiness for the load balancer"
   type        = bool
-}
-
-variable "private_subnet1_a" {
-  description = "ID of the subnet to be used for the ISE deployment in an Availability Zone A."
-  type        = string
-}
-
-variable "private_subnet1_b" {
-  description = "ID of the subnet to be used for the ISE deployment in an Availability Zone B."
-  type        = string
 }
 
 variable "vpcid" {

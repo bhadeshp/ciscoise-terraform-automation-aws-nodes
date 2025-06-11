@@ -7,7 +7,6 @@
 
 1. This project runs terraform module to deploy upto 58 ISE nodes(min:2 | max:58) on AWS based on User Input
 2. It deploys the required Infrastructure and configure ISE nodes as per user Input
-3. This module requires creation of minimun 2 subnets in the VPC infrastructure
 
 ## ISE Supported Versions
 - 3.1
@@ -74,7 +73,7 @@ Choose one of the following options to setup ISE infra
 
 To deploy using an existing VPC
   ```
-  cd examples/create-ec2-with-existing-vpc
+  cd aws-nodes/examples/create-ec2-with-existing-vpc
   ```
   Refer [create-ec2-with-existing-vpc README](./aws-nodes/examples/create-ec2-with-existing-vpc/README.md) and update the variables in terraform.tfvars
 
@@ -82,7 +81,7 @@ To deploy using an existing VPC
 
 To deploy using a new VPC
 ```
-cd examples/create-ec2-with-new-vpc
+cd aws-nodes/examples/create-ec2-with-new-vpc
 ```
 Refer [create-ec2-with-new-vpc README](./aws-nodes/examples/create-ec2-with-new-vpc/README.md) and update the variables in terraform.tfvars
 

@@ -17,10 +17,11 @@
 locals {
   ise_username_map     = { 3.1 = "admin", 3.2 = "iseadmin", 3.3 = "iseadmin", 3.4 = "iseadmin" }
   ise_userdata_map     = merge({ for ise_version in ["3.1", "3.2", "3.3"] : ise_version => "userdata.tftpl" }, { "3.4" : "userdata_3.4.tftpl" })
+  ise_instance_config  = merge(var.primary_instance_config, var.secondary_instance_config, var.psn_instance_config)
   roles                = flatten(concat([for vm in values(var.secondary_instance_config) : split(",", vm.roles)], [for vm in values(var.psn_instance_config) : split(",", vm.roles)]))
-  ise_nodes_list       = concat([for key in keys(var.primary_instance_config) : aws_instance.primary_ise_server[key].id], [for key in keys(var.secondary_instance_config) : aws_instance.secondary_ise_server[key].id], [for key in keys(var.psn_instance_config) : aws_instance.PSN_node[key].id])
-  ise_hostnames_list   = concat([for key in keys(var.primary_instance_config) : key], [for key in keys(var.secondary_instance_config) : key], [for key in keys(var.psn_instance_config) : key])
-  ise_private_ip_list  = concat([for key in keys(var.primary_instance_config) : aws_instance.primary_ise_server[key].private_ip], [for key in keys(var.secondary_instance_config) : aws_instance.secondary_ise_server[key].private_ip], [for key in keys(var.psn_instance_config) : aws_instance.PSN_node[key].private_ip])
+  ise_nodes_list       = concat([for key in keys(var.primary_instance_config) : aws_instance.ise_node[key].id], [for key in keys(var.secondary_instance_config) : aws_instance.ise_node[key].id], [for key in keys(var.psn_instance_config) : aws_instance.ise_node[key].id])
+  ise_hostnames_list   = concat(keys(var.primary_instance_config), keys(var.secondary_instance_config), keys(var.psn_instance_config))
+  ise_private_ip_list  = concat([for key in keys(var.primary_instance_config) : aws_instance.ise_node[key].private_ip], [for key in keys(var.secondary_instance_config) : aws_instance.ise_node[key].private_ip], [for key in keys(var.psn_instance_config) : aws_instance.ise_node[key].private_ip])
   ise_ssm_pan_fqdn_map = merge({ Primary_FQDN = "${local.ise_hostnames_list[0]}.${var.dns_domain}", Secondary_FQDN = "${local.ise_hostnames_list[1]}.${var.dns_domain}" })
   ise_ssm_pan_ip_map   = merge({ Primary_IP = local.ise_private_ip_list[0], Secondary_IP = local.ise_private_ip_list[1] })
   ise_ssm_psn_fqdn_map = { for hostname in slice(local.ise_hostnames_list, 2, length(local.ise_hostnames_list)) : "${hostname}_FQDN" => "${hostname}.${var.dns_domain}" }

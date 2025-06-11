@@ -43,8 +43,6 @@ module "cisco_ise_ec2" {
   aws_region                = var.aws_region
   vpcid                     = module.cisco_ise_vpc.vpc_id
   vpc_cidr                  = var.vpc_cidr
-  private_subnet1_a         = module.cisco_ise_vpc.private_subnet_ids[0]
-  private_subnet1_b         = module.cisco_ise_vpc.private_subnet_ids[1]
   subnet_id_list            = module.cisco_ise_vpc.private_subnet_ids
   dns_domain                = var.dns_domain
   primary_instance_config   = var.primary_instance_config

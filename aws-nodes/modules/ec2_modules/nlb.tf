@@ -23,14 +23,11 @@ resource "aws_lb" "psn_nlb" {
   load_balancer_type = "network"
   ip_address_type    = "ipv4"
 
-  subnet_mapping {
-    subnet_id            = var.private_subnet1_a
-    private_ipv4_address = var.lb_private_address_subnet1 // this is giving specific ip for alb in each AZ. Manual input needed. Take this as a user inputd
-  }
-
-  subnet_mapping {
-    subnet_id            = var.private_subnet1_b
-    private_ipv4_address = var.lb_private_address_subnet2
+  dynamic "subnet_mapping" {
+    for_each = var.subnet_id_list
+    content {
+      subnet_id = subnet_mapping.value
+    }
   }
 
   enable_cross_zone_load_balancing = false
