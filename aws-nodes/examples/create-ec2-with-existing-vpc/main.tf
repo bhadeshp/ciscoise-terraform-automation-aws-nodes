@@ -103,9 +103,10 @@ module "RegisterSecondaryNodeLambda" {
 }
 
 module "RegisterPSNNodesLambda" {
+  count              = length(var.psn_instance_config) != 0 ? 1 : 0
   source             = "../../modules/lambda_modules/RegisterPSNNodesLambda"
   function_name      = "RegisterPSNNodesLambda-ISE-Lambda"
-  subnet_ids         = [var.subnet_id_list[0]]
+  subnet_ids         = [module.cisco_ise_vpc.private_subnet_ids[0]]
   security_group_ids = [module.cisco_ise_ec2.security_group_ids[0]]
   aws_region         = var.aws_region
   layer_arn          = local.layer_arn
@@ -123,13 +124,24 @@ module "checkSyncStatusLambda" {
   depends_on         = [time_sleep.wait_8_minutes]
 }
 
+module "StepFuntionExecutionPSN" {
+  count                              = length(var.psn_instance_config) != 0 ? 1 : 0
+  source                             = "../../modules/lambda_modules/StepFunctionPSN"
+  aws_region                         = var.aws_region
+  check_ise_status_lambda_arn        = module.CheckISEStatusLambda.lambda_function_arn
+  set_primary_pan_lambda_arn         = module.SetPrimaryPANLambda.SetPrimaryPANlambda_function_arn
+  register_secondary_node_lambda_arn = module.RegisterSecondaryNodeLambda.RegisterSecondaryNodelambda_function_arn
+  check_sync_status_lambda_arn       = module.checkSyncStatusLambda.lambda_function_arn
+  register_psn_nodes_lambda_arn      = length(var.psn_instance_config) != 0 ? try(module.RegisterPSNNodesLambda[0].lambda_function_arn, null) : null
+}
+
 module "StepFuntionExecution" {
+  count                              = length(var.psn_instance_config) == 0 ? 1 : 0
   source                             = "../../modules/lambda_modules/StepFunction"
   aws_region                         = var.aws_region
   check_ise_status_lambda_arn        = module.CheckISEStatusLambda.lambda_function_arn
   set_primary_pan_lambda_arn         = module.SetPrimaryPANLambda.SetPrimaryPANlambda_function_arn
   register_secondary_node_lambda_arn = module.RegisterSecondaryNodeLambda.RegisterSecondaryNodelambda_function_arn
-  register_psn_nodes_lambda_arn      = module.RegisterPSNNodesLambda.lambda_function_arn
   check_sync_status_lambda_arn       = module.checkSyncStatusLambda.lambda_function_arn
 }
 
@@ -137,5 +149,5 @@ module "TriggerSchedule" {
   source            = "../../modules/lambda_modules/IseScheduler"
   aws_region        = var.aws_region
   scheduler_name    = "ise-scheduler"
-  step_function_arn = module.StepFuntionExecution.step_function_arn
+  step_function_arn = length(var.psn_instance_config) != 0 ? try(module.StepFuntionExecutionPSN[0].step_function_arn, null) : try(module.StepFuntionExecution[0].step_function_arn, null)
 }
