@@ -106,7 +106,7 @@ module "RegisterPSNNodesLambda" {
   count              = length(var.psn_instance_config) != 0 ? 1 : 0
   source             = "../../modules/lambda_modules/RegisterPSNNodesLambda"
   function_name      = "RegisterPSNNodesLambda-ISE-Lambda"
-  subnet_ids         = [module.cisco_ise_vpc.private_subnet_ids[0]]
+  subnet_ids         = [var.subnet_id_list[0]]
   security_group_ids = [module.cisco_ise_ec2.security_group_ids[0]]
   aws_region         = var.aws_region
   layer_arn          = local.layer_arn
