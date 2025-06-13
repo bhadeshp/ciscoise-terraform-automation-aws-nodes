@@ -461,9 +461,12 @@ variable "primary_instance_config" {
   }
 
   validation {
-    condition     = alltrue([for key, v in var.primary_instance_config : length(key) < 20])
-    error_message = "Hostname must not exceed 19 characters: ${format("%#v", { for key, v in var.primary_instance_config : key => length(key) if length(key) > 19 })}"
-  }
+    condition = alltrue([
+      for key, v in var.primary_instance_config :
+      can(regex("^[a-zA-Z0-9-]{1,19}$", key))
+    ])
+    error_message = "Hostname must be 1-19 characters, only alphanumeric and hyphens allowed: ${format("%#v", { for key, v in var.primary_instance_config : key => key if !can(regex("^[a-zA-Z0-9-]{1,19}$", key)) })}"
+  } 
 }
 
 variable "secondary_instance_config" {
@@ -515,8 +518,11 @@ variable "secondary_instance_config" {
   }
 
   validation {
-    condition     = alltrue([for key, v in var.secondary_instance_config : length(key) < 20])
-    error_message = "Hostname must not exceed 19 characters: ${format("%#v", { for key, v in var.primary_instance_config : key => length(key) if length(key) > 19 })}"
+    condition = alltrue([
+      for key, v in var.secondary_instance_config :
+      can(regex("^[a-zA-Z0-9-]{1,19}$", key))
+    ])
+    error_message = "Hostname must be 1-19 characters, only alphanumeric and hyphens allowed: ${format("%#v", { for key, v in var.secondary_instance_config : key => key if !can(regex("^[a-zA-Z0-9-]{1,19}$", key)) })}"
   }
 }
 
@@ -580,6 +586,14 @@ variable "psn_instance_config" {
   validation {
     condition     = alltrue([for key, v in var.psn_instance_config : length(key) < 20])
     error_message = "Hostname must not exceed 19 characters: ${format("%#v", { for key, v in var.psn_instance_config : key => length(key) if length(key) > 19 })}"
+  }
+
+  validation {
+    condition = alltrue([
+      for key, v in var.psn_instance_config :
+      can(regex("^[a-zA-Z0-9-]{1,19}$", key))
+    ])
+    error_message = "Hostname must be 1-19 characters, only alphanumeric and hyphens allowed: ${format("%#v", { for key, v in var.psn_instance_config : key => key if !can(regex("^[a-zA-Z0-9-]{1,19}$", key)) })}"
   }
 }
 
