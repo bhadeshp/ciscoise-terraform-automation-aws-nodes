@@ -16,7 +16,7 @@
 
 
 module "cisco_ise" {
-  source = "./modules/vpc_modules"
+  source = "../../aws-vpc/modules/vpc_modules"
 
   vpc_cidr              = var.vpc_cidr
   vpc_name              = var.vpc_name
