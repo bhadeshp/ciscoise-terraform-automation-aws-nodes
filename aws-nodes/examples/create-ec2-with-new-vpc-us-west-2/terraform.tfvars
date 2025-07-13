@@ -19,8 +19,8 @@
 ################################################
 vpc_cidr             = "10.0.0.0/16"                # CIDR block for the VPC
 vpc_name             = "cisco_ise"                  # Name tag for the VPC
-aws_region           = "us-east-1"                  # Specify the AWS region
-availability_zones   = ["us-east-1a", "us-east-1b"] # List of availability zones
+aws_region           = "us-west-2"                  # Specify the AWS region
+availability_zones   = ["us-west-2a", "us-west-2b"] # List of availability zones
 enable_dns_hostnames = true                         # Whether to enable DNS hostnames for instances in the VPC. Allowed values are 'true' and 'false'
 
 ######################################
@@ -71,7 +71,7 @@ internet_gateway_name = "Cisco_ISE_IGW"                  # Name tag for the Inte
 # NOTE: Hostname only supports alphanumeric characters and hyphen (-). The length of the hostname should not exceed 19 characters, otherwise deployment will fail
 # Example: Below primary-ise-server is a dynamic hostname provided by user.
 primary_instance_config = {
-  primary-ise-server = {
+  primary-ise-usw2 = {
     instance_type = "m5.4xlarge"
     storage_size  = 500
   }
@@ -103,7 +103,7 @@ primary_instance_config = {
 # NOTE: Hostname only supports alphanumeric characters and hyphen (-). The length of the hostname should not exceed 19 characters, otherwise deployment will fail
 # Example: Below sec-ise-server is a dynamic hostname provided by user.
 secondary_instance_config = {
-  sec-ise-server = {
+  sec-ise-usw2 = {
     instance_type = "t3.xlarge"
     storage_size  = 500
     services      = "Session,Profiler,pxGrid"
@@ -146,26 +146,21 @@ Please use below example for the reference.
 # NOTE: Hostname only supports alphanumeric characters and hyphen (-). The length of the hostname should not exceed 19 characters, otherwise deployment will fail
 # Example: Below secmon-server, psn-ise-server-2 and so on are the dynamic hostname provided by user.
 psn_instance_config = {
-  secmon-server = {
-    instance_type = "m5.2xlarge"
-    storage_size  = 500
-    roles         = "SecondaryMonitoring"
-  }
-  psn-ise-server-2 = {
-    instance_type = "t3.xlarge"
-    storage_size  = 600
-    services      = "Session,Profiler,PassiveIdentity"
+  # secmon-server-usw2 = {
+  #   instance_type = "m5.2xlarge"
+  #   storage_size  = 500
+  #   roles         = "SecondaryMonitoring"
+  # }
+  # psn-ise-2-usw2 = {
+  #   instance_type = "t3.xlarge"
+  #   storage_size  = 600
+  #   services      = "Session,Profiler,PassiveIdentity"
 
-  }
-  psn-ise-server-3 = {
-    instance_type = "t3.xlarge"
-    storage_size  = 700
-    services      = "Session,Profiler"
-  }
+  # }
 }
 
 ### User needs to create a keypair and pass the key pair name
-key_pair_name = "ise-test-nv" # Name of the key pair for SSH access
+key_pair_name = "ise-test-nv-usw2" # Name of the key pair for SSH access
 
 ###Storage Details###
 ebs_encrypt = false # Choose true to enable EBS encryption
