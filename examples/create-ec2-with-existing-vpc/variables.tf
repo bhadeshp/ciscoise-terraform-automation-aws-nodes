@@ -219,11 +219,21 @@ variable "px_grid_cloud" {
 variable "primarynameserver" {
   description = "Enter the IP address of the primary name server. Only IPv4 addresses are supported. Example: 169.254.169.253"
   type        = string
+  
+  validation {
+    condition     = var.primarynameserver != null && var.primarynameserver != ""
+    error_message = "The primarynameserver variable must be defined and cannot be empty. Please provide a valid IP address for the primary name server."
+  }
 }
 
 variable "ntpserver" {
   description = "Enter the IPv4 address or FQDN of the NTP server that must be used for synchronization, Example, 169.254.169.123"
   type        = string
+  
+  validation {
+    condition     = var.ntpserver != null && var.ntpserver != ""
+    error_message = "The ntpserver variable must be defined and cannot be empty. Please provide a valid IP address or FQDN for the NTP server."
+  }
 }
 
 
@@ -233,4 +243,28 @@ variable "ntpserver" {
 variable "dns_domain" {
   description = "Enter a domain name in correct syntax (for example, cisco.com). The valid characters for this field are ASCII characters, numerals, hyphen (-), and period (.). If you use the wrong syntax, Cisco ISE services might not come up on launch."
   type        = string
+}
+
+variable "secondarynameserver" {
+  description = "Enter the IP address of the secondary name server (optional). Only IPv4 addresses are supported."
+  type        = string
+  default     = ""
+}
+
+variable "tertiarynameserver" {
+  description = "Enter the IP address of the tertiary name server (optional). Only IPv4 addresses are supported."
+  type        = string
+  default     = ""
+}
+
+variable "secondaryntpserver" {
+  description = "Enter the IPv4 address or FQDN of the secondary NTP server (optional)"
+  type        = string
+  default     = ""
+}
+
+variable "tertiaryntpserver" {
+  description = "Enter the IPv4 address or FQDN of the tertiary NTP server (optional)"
+  type        = string
+  default     = ""
 }
