@@ -56,7 +56,7 @@ resource "aws_instance" "ise_node" {
   tags = {
     Name = each.key
   }
-  user_data = base64encode(templatefile("${path.module}/${local.ise_userdata_map[var.ise_version]}", { hostname = each.key, dns_domain = var.dns_domain, username = local.ise_username, password = var.password, time_zone = var.time_zone, ers_api = var.ers_api, open_api = var.open_api, px_grid = var.px_grid, px_grid_cloud = var.px_grid_cloud, primarynameserver = var.primarynameserver, ntpserver = var.ntpserver }))
+  user_data = base64encode(templatefile("${path.module}/${local.ise_userdata_map[var.ise_version]}", { hostname = each.key, dns_domain = var.dns_domain, username = local.ise_username, password = var.password, time_zone = var.time_zone, ers_api = var.ers_api, open_api = var.open_api, px_grid = var.px_grid, px_grid_cloud = var.px_grid_cloud, primarynameserver = var.primarynameserver, ntpserver = var.ntpserver, secondarynameserver = var.secondarynameserver, tertiarynameserver = var.tertiarynameserver, secondaryntpserver = var.secondaryntpserver, tertiaryntpserver = var.tertiaryntpserver }))
 }
 
 
