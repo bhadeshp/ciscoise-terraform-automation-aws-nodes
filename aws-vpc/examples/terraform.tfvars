@@ -19,8 +19,7 @@
 # List of availability zones to use for creating resources
 availability_zones = [
   "us-east-1a",
-  "us-east-1b",
-  "us-east-1c"
+  "us-east-1b"
 ]
 aws_region               = "us-east-1"    # AWS region in which resources will be provisioned.
 create_eips              = true           # Whether to create Elastic IPs (EIPs) for resources like NAT gateways. Allowed values are 'true' and 'false'
@@ -45,15 +44,13 @@ ntp_servers = [
 # Enter the Subnet CIDR for Private Subnets 
 private_subnet_cidrs = [
   "10.0.11.0/24",
-  "10.0.12.0/24",
-  "10.0.13.0/24"
+  "10.0.12.0/24"
 ]
 
 # Enter the Subnet CIDR for Public Subnets 
 public_subnet_cidrs = [
   "10.0.1.0/24",
-  "10.0.2.0/24",
-  "10.0.3.0/24"
+  "10.0.2.0/24"
 ]
 
 # Enter Network related variables
